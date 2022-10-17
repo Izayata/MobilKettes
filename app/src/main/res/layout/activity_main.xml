@@ -5,7 +5,26 @@
     android:id="@+id/layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity" >
+    android:alpha="0.5"
+    tools:context=".MainActivity">
+
+    <FrameLayout
+        android:id="@+id/dark_theme"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:alpha="0.5"
+        android:background="@android:color/black">
+
+    </FrameLayout>
+
+    <FrameLayout
+        android:id="@+id/white_theme"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:alpha="0.5"
+        android:background="@android:color/white">
+
+    </FrameLayout>
 
     <Button
         android:id="@+id/warm_colour_button"

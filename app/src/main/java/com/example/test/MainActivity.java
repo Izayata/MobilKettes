@@ -1,5 +1,7 @@
 package com.example.test;
 
+import static java.lang.Thread.sleep;
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
@@ -13,6 +15,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.FrameLayout;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,7 +23,8 @@ import java.util.Random;
 
 public class MainActivity extends AppCompatActivity {
     private ConstraintLayout cont;
-    private Button b;
+    private FrameLayout dark_theme;
+    private FrameLayout white_theme;
     public static Random r = new Random();
     private static final float SHAKE_THRESHOLD = 3.25f; // m/(s^2)
     private static final int MIN_TIME_BETWEEN_SHAKES_MILLISECS = 1000;
@@ -31,6 +35,7 @@ public class MainActivity extends AppCompatActivity {
     private SensorEventListener sel = new SensorEventListener() {
         @Override
         public void onSensorChanged(SensorEvent event) {
+//            sleep(500);
             if (event.sensor.getType() == Sensor.TYPE_ACCELEROMETER) {
                 long curTime = System.currentTimeMillis();
                 if ((curTime - mLastShakeTime) > MIN_TIME_BETWEEN_SHAKES_MILLISECS) {
@@ -38,20 +43,28 @@ public class MainActivity extends AppCompatActivity {
                     float y = event.values[1];
                     float z = event.values[2];
 
-                    if(x > y && Math.abs(x) > 2.5) {
+                    if(x > 3.5) {
                         cont.setBackgroundColor(Color.parseColor(generateWarmColour()));
-                    } else if(y > x && Math.abs(y) > 2.5) {
+                    } else if(x < -3.5) {
                         cont.setBackgroundColor(Color.parseColor(generateColdColour()));
                     }
-
+                    if(y > 5.1 && white_theme.getAlpha() <= 1.0) {
+                        dark_theme.setAlpha(dark_theme.getAlpha() - (float)(0.2));
+                        white_theme.setAlpha(white_theme.getAlpha() + (float)(0.2));
+                    } else if(y < 2  && dark_theme.getAlpha() <= 1.0) {
+                        dark_theme.setAlpha(dark_theme.getAlpha() + (float)(0.2));
+                        white_theme.setAlpha(white_theme.getAlpha() - (float)(0.2));
+                    }
                     double acceleration = Math.sqrt(Math.pow(x, 2) +
                             Math.pow(y, 2) +
                             Math.pow(z, 2)) - SensorManager.GRAVITY_EARTH;
-                    Log.d(APP_NAME, "Acceleration is " + acceleration + "m/s^2");
-                    Log.d(APP_NAME, "X: " + x + "Y: " + y + "Z: " + z);
+//                    Log.d(APP_NAME, "Acceleration is " + acceleration + "m/s^2");
+//                    Log.d(APP_NAME, "X: " + x);
+                    Log.d(APP_NAME, "Y: " + y);
+//                    Log.d(APP_NAME, "Z: " + z);
                     if (acceleration > SHAKE_THRESHOLD) {
                         mLastShakeTime = curTime;
-                        Log.d(APP_NAME, "Shake, Rattle, and Roll");
+//                        Log.d(APP_NAME, "Shake, Rattle, and Roll");
                     }
                 }
             }
@@ -68,6 +81,8 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         cont = findViewById(R.id.layout);
+        dark_theme = findViewById(R.id.dark_theme);
+        white_theme = findViewById(R.id.white_theme);
 
         // Get a sensor manager to listen for shakes
         mSensorMgr = (SensorManager)getSystemService(SENSOR_SERVICE);
