@@ -22,7 +22,7 @@ public class MainActivity extends AppCompatActivity {
         cont = findViewById(R.id.layout);
 
     }
-
+    //komment commithoz
     public void generateWarmColourOnClick(View view) {
         cont.setBackgroundColor(Color.parseColor(generateWarmColour()));
     }
