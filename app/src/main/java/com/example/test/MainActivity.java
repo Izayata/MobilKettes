@@ -31,6 +31,7 @@ public class MainActivity extends AppCompatActivity {
     private long mLastShakeTime;
     private SensorManager mSensorMgr;
     private static final String APP_NAME = "Teszt";
+    private static float yPrevious = 0.0F;
 
     private SensorEventListener sel = new SensorEventListener() {
         @Override
@@ -43,17 +44,31 @@ public class MainActivity extends AppCompatActivity {
                     float y = event.values[1];
                     float z = event.values[2];
 
-                    if(x > 3.5) {
+//                    white_theme.setAlpha(y/10);
+//                    dark_theme.setAlpha(Math.abs((y)/10));
+                    if(x > 3.5 && x < 6.5) {
                         cont.setBackgroundColor(Color.parseColor(generateWarmColour()));
-                    } else if(x < -3.5) {
+                        dark_theme.setAlpha(0.0F);
+                        white_theme.setAlpha(0.0F);
+                    } else if(x < -3.5 && x > -6.5) {
                         cont.setBackgroundColor(Color.parseColor(generateColdColour()));
+                        dark_theme.setAlpha(0.0F);
+                        white_theme.setAlpha(0.0F);
                     }
-                    if(y > 5.1 && white_theme.getAlpha() <= 1.0) {
-                        dark_theme.setAlpha(dark_theme.getAlpha() - (float)(0.2));
-                        white_theme.setAlpha(white_theme.getAlpha() + (float)(0.2));
-                    } else if(y < 2  && dark_theme.getAlpha() <= 1.0) {
-                        dark_theme.setAlpha(dark_theme.getAlpha() + (float)(0.2));
-                        white_theme.setAlpha(white_theme.getAlpha() - (float)(0.2));
+                    if(y < 0) {
+                        cont.setAlpha(1.0F);
+                        dark_theme.setAlpha(Math.abs(y)/10);
+                        white_theme.setAlpha(0.0F);
+                    }
+                    else if(y == 0) {
+                        cont.setAlpha(1.0F);
+                        dark_theme.setAlpha(0.0F);
+                        white_theme.setAlpha(0.0F);
+                    }
+                    else if(y > 0) {
+                        dark_theme.setAlpha(0.0F);
+                        cont.setAlpha(1.0F);
+                        white_theme.setAlpha(y/10);
                     }
                     double acceleration = Math.sqrt(Math.pow(x, 2) +
                             Math.pow(y, 2) +
